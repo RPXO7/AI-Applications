@@ -10,10 +10,20 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@langchain/community": "^0.3.49",
+    "@langchain/core": "^0.3.66",
+    "@langchain/openai": "^0.6.3",
+    "@langchain/textsplitters": "^0.1.0",
+    "@types/pdf-parse": "^1.1.5",
+    "langchain": "^0.3.30",
+    "lucide-react": "^0.534.0",
+    "mammoth": "^1.9.1",
     "next": "15.4.5",
     "openai": "^5.10.2",
+    "pdf-parse": "^1.1.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-dropzone": "^14.3.8",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
