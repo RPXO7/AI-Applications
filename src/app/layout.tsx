@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "AI Applications Suite",
+  title: "AI Applications",
   description: "A comprehensive suite of AI-powered applications including chatbot, text summarization, OCR, classification, and Q&A",
 }
 

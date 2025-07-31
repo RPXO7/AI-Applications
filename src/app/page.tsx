@@ -50,7 +50,7 @@ export default function Home() {
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-extrabold tracking-tight mb-4" style={{ color: 'var(--foreground)' }}>
-          AI Applications Suite
+          AI Applications
         </h1>
         <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--secondary-foreground)' }}>
           A comprehensive collection of AI-powered applications including chatbot, text processing, OCR, classification, and Q&A systems.
