@@ -1,8 +1,6 @@
 import { NextRequest } from "next/server"
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters"
 import { MemoryVectorStore } from "langchain/vectorstores/memory"
-// Using custom embeddings instead of OpenAI
-// import { OpenAIEmbeddings } from "@langchain/openai"
 import { ChatOpenAI } from "@langchain/openai"
 import { ChatPromptTemplate } from "@langchain/core/prompts"
 import { RunnableSequence } from "@langchain/core/runnables"
@@ -102,7 +100,7 @@ async function processDocument(text: string, filename: string) {
     chunkOverlap: 200,
   })
 
-  console.log(textSplitter, "Splitting text into chunks...")
+  console.log("Splitting text into chunks...")
   const docs = await textSplitter.createDocuments([text], [{ source: filename }])
 
   // Create or update vector store with custom similarity search
@@ -152,13 +150,16 @@ async function queryDocuments(question: string) {
 
   // Create RAG prompt template
   const ragPrompt = ChatPromptTemplate.fromTemplate(`
-Answer the question based only on the following context. If you cannot answer the question based on the context, say "I don't have enough information in the provided documents to answer this question."
+You are a helpful assistant that answers questions based on the provided document context. 
 
-Context: {context}
+IMPORTANT: Answer the question using ONLY the information from the context below. If the context doesn't contain enough information to answer the question, say "I don't have enough information in the provided documents to answer this question."
+
+Context from documents:
+{context}
 
 Question: {question}
 
-Answer:`)
+Please provide a detailed and comprehensive answer based on the context above:`)
 
   // Create RAG chain
   const ragChain = RunnableSequence.from([
