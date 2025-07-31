@@ -2,11 +2,11 @@
 
 import { useState, useRef, useEffect } from "react"
 import { v4 as uuidv4 } from "uuid"
-import { Send } from "lucide-react"
+import { Send, Loader2 } from "lucide-react"
 import { ChatMessage } from "@/types"
 
 // --- UI Components ---
-const ChatBubble = ({ message }: { message: ChatMessage }) => {
+const ChatBubble = ({ message, isLoading }: { message: ChatMessage, isLoading?: boolean }) => {
   const isUser = message.role === "user"
   return (
     <div
@@ -25,7 +25,14 @@ const ChatBubble = ({ message }: { message: ChatMessage }) => {
           border: isUser ? 'none' : '1px solid var(--border)'
         }}
       >
-        {message.content}
+        {isLoading ? (
+          <div className="flex items-center gap-2">
+            <Loader2 size={16} className="animate-spin" style={{ color: 'var(--primary)' }} />
+            <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>AI is thinking...</span>
+          </div>
+        ) : (
+          message.content
+        )}
       </div>
       {isUser && (
         <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--muted)' }}>
@@ -63,14 +70,18 @@ const ChatInput = ({ onSend, isLoading }: { onSend: (text: string) => void, isLo
         }}
         disabled={isLoading}
       />
-      <button 
-        type="submit" 
-        className="p-3 rounded-full transition-all duration-200 transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
-        disabled={isLoading}
-      >
-        <Send size={20} />
-      </button>
+              <button 
+          type="submit" 
+          className="p-3 rounded-full transition-all duration-200 transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <Loader2 size={20} className="animate-spin" />
+          ) : (
+            <Send size={20} />
+          )}
+        </button>
     </form>
   )
 }
@@ -149,8 +160,14 @@ export default function ChatbotPage() {
       </h1>
       <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto" style={{ background: 'var(--muted)' }}>
         {messages.map((msg) => (
-          <ChatBubble key={msg.id} message={msg} />
+          <ChatBubble key={msg.id} message={msg} isLoading={isLoading && msg.id === messages[messages.length - 1]?.id && msg.role === 'assistant'}/>
         ))}
+        {isLoading && messages.length > 0 && messages[messages.length - 1]?.role === 'user' && (
+          <ChatBubble 
+            message={{ id: 'loading', role: 'assistant', content: '', timestamp: new Date() }} 
+            isLoading={true}
+          />
+        )}
       </div>
       {error && (
         <div className="p-4 border-t" style={{ color: 'var(--error)', background: 'rgba(239, 68, 68, 0.1)', borderColor: 'var(--border)' }}>

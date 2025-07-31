@@ -6,11 +6,18 @@ import { QnAResult } from "@/types"
 // --- LangChain Configuration ---
 const llm = new ChatOpenAI({
   openAIApiKey: process.env.OPENROUTER_API_KEY,
-  modelName: "meta-llama/llama-3.2-3b-instruct:free",
+  modelName: "openai/gpt-3.5-turbo", // Using a more reliable model for Q&A
   configuration: {
     baseURL: "https://openrouter.ai/api/v1",
+    defaultHeaders: {
+      "HTTP-Referer": process.env.VERCEL_URL || "http://localhost:3000",
+      "X-Title": "AI Applications Demo",
+      "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json"
+    }
   },
   temperature: 0.2, // Lower temperature for more factual answers
+  maxRetries: 3
 })
 
 // --- Q&A Prompt Template ---
@@ -39,9 +46,20 @@ export async function POST(req: NextRequest) {
       return Response.json({ success: false, error: "Question is required" }, { status: 400 })
     }
 
-    if (!process.env.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY === "your_openrouter_api_key_here") {
-      return new Response("OpenRouter API key not configured", { status: 400 })
+    // Validate API key
+    const openRouterKey = process.env.OPENROUTER_API_KEY
+    if (!openRouterKey || openRouterKey === "your_openrouter_api_key_here") {
+      console.error("OpenRouter API key not configured properly")
+      return Response.json(
+        { 
+          success: false, 
+          error: "OpenRouter API key not configured. Please add OPENROUTER_API_KEY to .env.local"
+        }, 
+        { status: 400 }
+      )
     }
+    
+    console.log("Using OpenRouter API for Q&A...")
 
     const result = await qaChain.invoke({ question, context })
 
@@ -54,12 +72,16 @@ export async function POST(req: NextRequest) {
 
     return Response.json({ success: true, data: qnaResult })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Q&A API error:", error)
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
     return Response.json(
-      { success: false, error: `Server error: ${error.message}` },
+      { 
+        success: false, 
+        error: `Server error: ${errorMessage}`,
+        details: error instanceof Error && error.cause ? error.cause : undefined
+      },
       { status: 500 }
     )
   }
 }
-
