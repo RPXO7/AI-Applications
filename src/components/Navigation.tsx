@@ -20,7 +20,7 @@ export default function Navigation() {
             className="text-2xl font-bold transition-colors hover:opacity-80"
             style={{ color: 'var(--primary)' }}
           >
-            🤖 AI Suite
+            AI Applications
           </Link>
           <div className="hidden md:flex space-x-6">
             {navLinks.map((link) => (

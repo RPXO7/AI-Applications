@@ -1,4 +1,4 @@
-# AI Applications Suite - Technology Stack Overview
+# AI Applications - Technology Stack Overview
 
 ## 🏗️ **Core Framework & Libraries**
 

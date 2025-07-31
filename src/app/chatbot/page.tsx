@@ -13,7 +13,7 @@ const ChatBubble = ({ message, isLoading }: { message: ChatMessage, isLoading?: 
       className={`flex items-end gap-3 ${isUser ? "justify-end" : ""}`}
     >
       {!isUser && (
-        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--primary)' }}>
+        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
           <span className="text-white text-sm font-bold">AI</span>
         </div>
       )}
