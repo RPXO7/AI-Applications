@@ -30,43 +30,7 @@ const AI_PERSONAS = {
     icon: <Users size={20} />,
     description: "Business analyst for data insights and strategic planning"
   },
-  general: { 
-    name: "General AI",
-    displayName: "🤖 General AI", 
-    icon: <Bot size={20} />,
-    description: "Versatile AI assistant for general questions and tasks"
-  },
-  developer: { 
-    name: "Developer",
-    displayName: "👨‍💻 Developer", 
-    icon: <BrainCircuit size={20} />,
-    description: "Expert software developer with code examples and best practices"
-  },
-  creative: { 
-    name: "Creative",
-    displayName: "🎨 Creative", 
-    icon: <Users size={20} />,
-    description: "Creative professional for writing, design, and content creation"
-  },
-  analyst: { 
-    name: "Analyst",
-    displayName: "📊 Analyst", 
-    icon: <Users size={20} />,
-    description: "Business analyst for data insights and strategic planning"
-  },
 }
-
-// --- LangChain Feature Indicators ---
-const LangChainFeatures = () => (
-  <div className="flex items-center gap-2 text-xs text-blue-600 mb-2">
-    <Database size={14} />
-    <span>Conversation Memory</span>
-    <Zap size={14} />
-    <span>Dynamic Prompts</span>
-    <MessageSquare size={14} />
-    <span>Streaming Responses</span>
-  </div>
-)
 
 // --- LangChain Feature Indicators ---
 const LangChainFeatures = () => (
@@ -87,11 +51,7 @@ const ChatBubble = ({ message, persona, isLoading }: { message: ChatMessage, per
     <div
       className={`flex items-end gap-3 ${isUser ? "justify-end" : ""}`}
     >
-    <div
-      className={`flex items-end gap-3 ${isUser ? "justify-end" : ""}`}
-    >
       {!isUser && (
-        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
         <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
           {AI_PERSONAS[persona as keyof typeof AI_PERSONAS]?.icon || <Bot size={20} />}
         </div>
@@ -116,8 +76,6 @@ const ChatBubble = ({ message, persona, isLoading }: { message: ChatMessage, per
       {isUser && (
         <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--muted)' }}>
           <span className="text-sm font-bold" style={{ color: 'var(--muted-foreground)' }}>You</span>
-        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--muted)' }}>
-          <span className="text-sm font-bold" style={{ color: 'var(--muted-foreground)' }}>You</span>
         </div>
       )}
     </div>
@@ -125,29 +83,6 @@ const ChatBubble = ({ message, persona, isLoading }: { message: ChatMessage, per
 }
 
 const PersonaSelector = ({ persona, setPersona, isLoading }: { persona: string, setPersona: (p: string) => void, isLoading: boolean }) => (
-  <div className="p-4 border-b" style={{ borderColor: 'var(--border)' }}>
-    <div className="flex items-center justify-center gap-2 mb-2">
-      <span className="text-sm font-semibold" style={{ color: 'var(--card-foreground)' }}>AI Persona:</span>
-      <select 
-        value={persona} 
-        onChange={(e) => setPersona(e.target.value)} 
-        className="px-3 py-1 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        style={{
-          background: 'var(--muted)',
-          color: 'var(--foreground)',
-          borderColor: 'var(--border)'
-        }}
-        disabled={isLoading}
-      >
-        {Object.entries(AI_PERSONAS).map(([key, { displayName }]) => (
-          <option key={key} value={key}>{displayName}</option>
-        ))}
-      </select>
-    </div>
-    <div className="text-xs text-center" style={{ color: 'var(--muted-foreground)' }}>
-      {AI_PERSONAS[persona as keyof typeof AI_PERSONAS]?.description}
-    </div>
-    <LangChainFeatures />
   <div className="p-4 border-b" style={{ borderColor: 'var(--border)' }}>
     <div className="flex items-center justify-center gap-2 mb-2">
       <span className="text-sm font-semibold" style={{ color: 'var(--card-foreground)' }}>AI Persona:</span>
@@ -216,7 +151,6 @@ export default function EnhancedChatbotPage() {
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
       const assistantMessage: ChatMessage = {
-      const assistantMessage: ChatMessage = {
         id: uuidv4(),
         role: "assistant",
         content: "",
@@ -236,8 +170,6 @@ export default function EnhancedChatbotPage() {
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -246,36 +178,11 @@ export default function EnhancedChatbotPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)] rounded-xl card-shadow-lg" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
       <h1 className="text-2xl font-bold p-6 border-b flex items-center gap-2" style={{ borderColor: 'var(--border)', color: 'var(--card-foreground)' }}>
-    <div className="flex flex-col h-[calc(100vh-8rem)] rounded-xl card-shadow-lg" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
-      <h1 className="text-2xl font-bold p-6 border-b flex items-center gap-2" style={{ borderColor: 'var(--border)', color: 'var(--card-foreground)' }}>
         <BrainCircuit size={24} className="text-blue-500"/>
         LangChain Powered Chatbot
         <span className="text-sm font-normal text-blue-600 ml-2">(Enhanced with Memory & Context)</span>
-        <span className="text-sm font-normal text-blue-600 ml-2">(Enhanced with Memory & Context)</span>
       </h1>
       <PersonaSelector persona={persona} setPersona={setPersona} isLoading={isLoading} />
-      <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto" style={{ background: 'var(--muted)' }}>
-        {messages.length === 0 && (
-          <div className="text-center py-8" style={{ color: 'var(--muted-foreground)' }}>
-            <BrainCircuit size={48} className="mx-auto mb-4 text-blue-500" />
-            <h3 className="text-lg font-semibold mb-2">LangChain Enhanced Chat</h3>
-            <p className="text-sm mb-4">This chatbot uses LangChain features:</p>
-            <div className="space-y-1 text-xs">
-              <div className="flex items-center justify-center gap-2">
-                <Database size={12} />
-                <span>Conversation Memory - Remembers previous interactions</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <Zap size={12} />
-                <span>Dynamic Prompts - Adapts responses based on persona</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <MessageSquare size={12} />
-                <span>Streaming Responses - Real-time AI responses</span>
-              </div>
-            </div>
-          </div>
-        )}
       <div ref={chatContainerRef} className="flex-grow p-6 space-y-4 overflow-y-auto" style={{ background: 'var(--muted)' }}>
         {messages.length === 0 && (
           <div className="text-center py-8" style={{ color: 'var(--muted-foreground)' }}>
@@ -315,21 +222,10 @@ export default function EnhancedChatbotPage() {
         </div>
       )}
       <div className="flex items-center gap-2 p-4 border-t" style={{ borderColor: 'var(--border)' }}>
-      {error && (
-        <div className="p-4 border-t" style={{ color: 'var(--error)', background: 'rgba(239, 68, 68, 0.1)', borderColor: 'var(--border)' }}>
-          <strong>Error:</strong> {error}
-        </div>
-      )}
-      <div className="flex items-center gap-2 p-4 border-t" style={{ borderColor: 'var(--border)' }}>
         <input
           type="text"
           placeholder="Ask the AI..."
           className="flex-grow px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          style={{
-            background: 'var(--muted)',
-            color: 'var(--foreground)',
-            borderColor: 'var(--border)'
-          }}
           style={{
             background: 'var(--muted)',
             color: 'var(--foreground)',
