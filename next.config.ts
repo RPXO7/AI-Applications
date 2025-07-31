@@ -9,14 +9,10 @@ const nextConfig: NextConfig = {
     // Ignore ESLint errors in production
     ignoreDuringBuilds: true,
   },
-  // Enable streaming responses
-  experimental: {
-    serverActions: true,
-  },
   // Optimize for production
   swcMinify: true,
   // Configure headers for API routes
-  headers: async () => {
+  async headers() {
     return [
       {
         source: '/api/:path*',
