@@ -6,7 +6,6 @@ const nextConfig = {
   eslint: { 
     ignoreDuringBuilds: true 
   },
-  swcMinify: true,
   async headers() {
     return [
       {
